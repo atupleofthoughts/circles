@@ -7,6 +7,8 @@ World::World(Framebuffer& fb)
     mCircle.x = rand() % fb.width();
     mCircle.y = rand() % fb.height();
     mCircle.radius = rand() % std::min(fb.width()/2, fb.height()/2);
+    if (mCircle.radius < 16)
+        mCircle.radius += 16;
 
     mCircle.setColor(rand() % 256, rand() % 256, rand() % 256);
 }
