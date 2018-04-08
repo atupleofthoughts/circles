@@ -18,31 +18,37 @@ int main(int argc, char *argv[])
     while ((opt = getopt_long_only(argc, argv, "", long_options, nullptr)) != -1) {
         switch (opt) {
             case 'w':
+            {
                 int w = atoi(optarg);
                 if (w == -1 || w % 2 != 0) {
                     fprintf(stderr, "invalid width\n");
                     exit(EXIT_FAILURE);
                 }
                 width = static_cast<uint32_t>(w);
-                break;
+            }
+            break;
             
             case 'h':
+            {
                 int h = atoi(optarg);
                 if (h == -1 || h % 2 != 0) {
                     fprintf(stderr, "invalid height\n");
                     exit(EXIT_FAILURE);
                 }
                 height = static_cast<uint32_t>(h);
-                break;
+            }
+            break;
 
             case 's':
+            {
                 int s = atoi(optarg);
                 if (s == -1) {
                     fprintf(stderr, "invalid seed\n");
                     exit(EXIT_FAILURE);
                 }
                 seed = static_cast<uint32_t>(s);
-                break;
+            }
+            break;
 
             case '?':
             default:
