@@ -1,5 +1,7 @@
 #include "world.hpp"
 #include <cstring>
+#include <chrono>
+#include <cmath>
 
 World::World(Framebuffer& fb)
     : mFramebuffer{fb}
@@ -30,4 +32,36 @@ void World::render()
             }
         }
     }
+}
+
+std::tuple<double,double> World::benchmark(size_t inner, size_t outer)
+{
+    std::vector<double> samples(outer);
+    double avg = 0.0;
+    double stddev = 0.0;
+
+    // short dryrun to avoid inconsistent timings
+    for (size_t i = 0; i < 4; ++i) {
+        render();
+    }
+
+    for (size_t i = 0; i < outer; ++i) {
+        auto startTime = std::chrono::high_resolution_clock::now();
+        for (size_t j = 0; j < inner; ++j) {
+            render();
+        }
+        std::chrono::duration<double, std::micro> duration = std::chrono::high_resolution_clock::now() - startTime;
+        samples[i] = duration.count()/double(inner);
+        avg += samples[i];
+    }
+    avg /= double(outer);
+
+    // get standard deviation
+    for (size_t i = 0; i < outer; ++i) {
+        double xi = (samples[i] - avg);
+        stddev += xi*xi;
+    }
+    stddev = std::sqrt(stddev/double(outer - 1));
+    
+    return std::make_tuple(avg, stddev);
 }

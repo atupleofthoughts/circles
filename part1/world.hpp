@@ -1,6 +1,7 @@
 #pragma once
 #include "framebuffer.hpp"
 #include <vector>
+#include <tuple>
 
 struct Circle
 {
@@ -26,7 +27,8 @@ public:
     World(Framebuffer& fb);
 
     void render();
-
+    std::tuple<double,double> benchmark(size_t inner, size_t outer);
+    
 private:
     Framebuffer& mFramebuffer;
     Circle mCircle;

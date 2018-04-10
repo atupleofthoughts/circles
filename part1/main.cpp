@@ -66,10 +66,11 @@ int main(int argc, char *argv[])
     try {
         Framebuffer fb{width, height};
         World w{fb};
-        w.render();
+        auto res = w.benchmark(1000, 10);
         fb.save("test.png");
+        printf("avg: %.2fus, std: %.2fus\n", std::get<0>(res), std::get<1>(res));
     }
-    catch(const std::runtime_error& e) {
+    catch(const std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
 
