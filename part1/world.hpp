@@ -24,12 +24,13 @@ struct Circle
 class World
 {
 public:
-    World(Framebuffer& fb);
+    World(size_t ncircles, Framebuffer& fb);
 
+    void drawCircle(const Circle& c);
     void render();
     std::tuple<double,double> benchmark(size_t inner, size_t outer);
     
 private:
     Framebuffer& mFramebuffer;
-    Circle mCircle;
+    std::vector<Circle> mCircles;
 };

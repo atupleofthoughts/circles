@@ -3,34 +3,45 @@
 #include <chrono>
 #include <cmath>
 
-World::World(Framebuffer& fb)
+World::World(size_t ncircles, Framebuffer& fb)
     : mFramebuffer{fb}
 {
-    mCircle.x = rand() % fb.width();
-    mCircle.y = rand() % fb.height();
-    mCircle.radius = rand() % std::min(fb.width()/2, fb.height()/2);
-    if (mCircle.radius < 16)
-        mCircle.radius += 16;
-
-    mCircle.setColor(rand() % 256, rand() % 256, rand() % 256);
+    mCircles.reserve(ncircles);
+    for (size_t i = 0; i < ncircles; ++i) {
+        uint32_t x = rand() % fb.width();
+        uint32_t y = rand() % fb.height();
+        uint32_t radius = (rand() % (std::min(fb.width(), fb.height())/4))+1;
+        uint32_t color = 0xFF000000 |
+            ( (rand() % 256) << FI_RGBA_RED_SHIFT) |
+            ( (rand() % 256) << FI_RGBA_GREEN_SHIFT) |
+            ( (rand() % 256) << FI_RGBA_BLUE_SHIFT);
+        mCircles.emplace_back(x, y, radius, color);
+    }
 }
 
-void World::render()
+void World::drawCircle(const Circle& c)
 {
     auto pixels = reinterpret_cast<uint32_t*>(mFramebuffer.pixels());
     auto width = mFramebuffer.width();
     auto height = mFramebuffer.height();
 
-    memset(pixels, 0xFF, width*height*sizeof(uint32_t));
-
     for (uint32_t y = 0; y < height; ++y) {
         for (uint32_t x = 0; x < width; ++x) {
-            uint32_t ox = x - mCircle.x;
-            uint32_t oy = y - mCircle.y;
-            if (ox*ox + oy*oy <= mCircle.radius*mCircle.radius) {
-                pixels[y*width+x] = mCircle.color;
+            uint32_t ox = x - c.x;
+            uint32_t oy = y - c.y;
+            if (ox*ox + oy*oy <= c.radius*c.radius) {
+                pixels[y*width+x] = c.color;
             }
         }
+    }
+}
+
+void World::render()
+{
+    memset(mFramebuffer.pixels(), 0xFF, mFramebuffer.width()*mFramebuffer.height()*sizeof(uint32_t));
+
+    for (const auto& c : mCircles) {
+        drawCircle(c);
     }
 }
 
