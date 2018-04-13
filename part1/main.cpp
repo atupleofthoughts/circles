@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     size_t ncircles = 10;
     uint32_t seed = 0;
     int opt = 0;
+    int retval = EXIT_SUCCESS;
     static struct option long_options[] = {
         { "width", required_argument, nullptr, 'w' },
         { "height", required_argument, nullptr, 'h' },
@@ -75,9 +76,10 @@ int main(int argc, char *argv[])
     }
     catch(const std::exception& e) {
         std::cerr << e.what() << std::endl;
+        retval = EXIT_FAILURE;
     }
 
     FreeImage_DeInitialise();
 
-    return 0;
+    return retval;
 }
