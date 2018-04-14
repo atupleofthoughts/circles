@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
         { "width", required_argument, nullptr, 'w' },
         { "height", required_argument, nullptr, 'h' },
         { "seed", required_argument, nullptr, 's' },
-        { "circles", required_argument, nullptr, 'c' },
+        { "ncircles", required_argument, nullptr, 'n' },
         { nullptr, 0, nullptr, 0 }
     };
 
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
                 seed = static_cast<uint32_t>(atoi(optarg));
                 break;
 
-            case 'c':
+            case 'n':
             {
                 ncircles = static_cast<uint32_t>(atoi(optarg));
                 if (ncircles == 0) {

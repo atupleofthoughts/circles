@@ -6,11 +6,11 @@
 struct Circle
 {
     uint32_t x,y;
-    uint32_t radius;
+    int32_t radius;
     uint32_t color;
     
     constexpr Circle() : x{0}, y{0}, radius{0}, color{0} {}
-    constexpr Circle(uint32_t x_, uint32_t y_, uint32_t r, uint32_t c) : x{x_}, y{y_}, radius{r}, color{c} {}
+    constexpr Circle(uint32_t x_, uint32_t y_, int32_t r, uint32_t c) : x{x_}, y{y_}, radius{r}, color{c} {}
 
     void setColor(uint8_t r, uint8_t g, uint8_t b)
     {
