@@ -29,8 +29,8 @@ public:
 
     Framebuffer& operator=(const Framebuffer&) = delete;
 
-    const uint32_t width() const { return mWidth; }
-    const uint32_t height() const { return mHeight; }
+    uint32_t width() const { return mWidth; }
+    uint32_t height() const { return mHeight; }
 
     uint8_t *pixels() { assert(mDIB != nullptr); return FreeImage_GetBits(mDIB); }
 

@@ -10,7 +10,7 @@ World::World(size_t ncircles, Framebuffer& fb)
     for (size_t i = 0; i < ncircles; ++i) {
         uint32_t x = rand() % fb.width();
         uint32_t y = rand() % fb.height();
-        int32_t radius = (rand() % (std::min(fb.width(), fb.height())/4))+1;
+        uint32_t radius = (rand() % (std::min(fb.width(), fb.height())/4))+1;
         uint32_t color = 0xFF000000 |
             ( (rand() % 256) << FI_RGBA_RED_SHIFT) |
             ( (rand() % 256) << FI_RGBA_GREEN_SHIFT) |
@@ -27,9 +27,9 @@ void World::drawCircle(const Circle& c)
 
     for (uint32_t y = 0; y < height; ++y) {
         for (uint32_t x = 0; x < width; ++x) {
-            int32_t ox = x - c.x;
-            int32_t oy = y - c.y;
-            if (ox*ox + oy*oy <= c.radius*c.radius) {
+            int ox = x - c.x;
+            int oy = y - c.y;
+            if (ox*ox + oy*oy <= (int)(c.radius*c.radius)) {
                 pixels[y*width+x] = c.color;
             }
         }

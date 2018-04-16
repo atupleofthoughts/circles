@@ -9,11 +9,12 @@ int main(int argc, char *argv[])
     size_t ncircles = 10;
     uint32_t seed = 0;
     int opt = 0;
+    int retval = EXIT_SUCCESS;
     static struct option long_options[] = {
         { "width", required_argument, nullptr, 'w' },
         { "height", required_argument, nullptr, 'h' },
         { "seed", required_argument, nullptr, 's' },
-        { "circles", required_argument, nullptr, 'c' },
+        { "ncircles", required_argument, nullptr, 'n' },
         { nullptr, 0, nullptr, 0 }
     };
 
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
                 seed = static_cast<uint32_t>(atoi(optarg));
                 break;
 
-            case 'c':
+            case 'n':
             {
                 ncircles = static_cast<uint32_t>(atoi(optarg));
                 if (ncircles == 0) {
@@ -59,9 +60,24 @@ int main(int argc, char *argv[])
         }
     }
 
+    if (width < 32) {
+        width = 32;
+    }
+    else if(width > 4096) {
+        width = 4096;
+    }
+
+    if (height < 32) {
+        height = 32;
+    }
+    else if(height > 4096) {
+        height = 4096;
+    }
+
     if (seed == 0) {
         seed = time(NULL);
     }
+
     std::srand(seed);
     printf("seed: %d\n", seed);
 
@@ -75,9 +91,10 @@ int main(int argc, char *argv[])
     }
     catch(const std::exception& e) {
         std::cerr << e.what() << std::endl;
+        retval = EXIT_FAILURE;
     }
 
     FreeImage_DeInitialise();
 
-    return 0;
+    return retval;
 }

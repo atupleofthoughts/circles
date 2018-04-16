@@ -11,6 +11,10 @@ World::World(size_t ncircles, Framebuffer& fb)
         uint32_t x = rand() % fb.width();
         uint32_t y = rand() % fb.height();
         uint32_t radius = (rand() % (std::min(fb.width(), fb.height())/4))+1;
+        if (radius < 16) {
+            radius = 16;
+        }
+
         uint32_t color = 0xFF000000 |
             ( (rand() % 256) << FI_RGBA_RED_SHIFT) |
             ( (rand() % 256) << FI_RGBA_GREEN_SHIFT) |
@@ -22,14 +26,28 @@ World::World(size_t ncircles, Framebuffer& fb)
 void World::drawCircle(const Circle& c)
 {
     auto pixels = reinterpret_cast<uint32_t*>(mFramebuffer.pixels());
-    auto width = mFramebuffer.width();
-    auto height = mFramebuffer.height();
+    int width = mFramebuffer.width();
+    int height = mFramebuffer.height();
 
-    for (uint32_t y = 0; y < height; ++y) {
-        for (uint32_t x = 0; x < width; ++x) {
-            uint32_t ox = x - c.x;
-            uint32_t oy = y - c.y;
-            if (ox*ox + oy*oy <= c.radius*c.radius) {
+    int startx = c.x - c.radius;
+    if (startx < 0)
+        startx = 0;
+    int starty = c.y - c.radius;
+    if (starty < 0)
+        starty = 0;
+
+    int endx = c.x + c.radius;
+    if (endx >= width)
+        endx = width-1;
+    int endy = c.y + c.radius;
+    if (endy >= height)
+        endy = height-1;
+
+    for (auto y = starty; y <= endy; ++y) {
+        for (auto x = startx; x <= endx; ++x) {
+            int ox = x - c.x;
+            int oy = y - c.y;
+            if (ox*ox + oy*oy <= (int)(c.radius*c.radius)) {
                 pixels[y*width+x] = c.color;
             }
         }
